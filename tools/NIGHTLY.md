@@ -21,7 +21,7 @@ Runs every day at about 8 AM IST. Prepares today's LinkedIn post (published by M
    - Render: `python3 tools/render.py spec.json carousels/<date>-<slug>.pdf --png-dir /tmp/png`. Look at the PNGs, fix overflow or overlap, render again.
    - Save slide 1 as `carousels/<date>-<slug>-cover.png`.
 5. **Write `today.json`** in the repo root, with keys `date, type, title, url, pdf_url, image_url, post, comment, facebook, x, page_text`.
-   - `pdf_url` / `image_url`: raw GitHub URLs of the PDF and cover PNG (`https://raw.githubusercontent.com/ravikiran-srini/ravikirans-carousels/main/...`). For `youtube`, `pdf_url` is empty and `image_url` is `https://img.youtube.com/vi/<id>/maxresdefault.jpg`.
+   - `pdf_url` / `image_url`: raw GitHub URLs of the PDF and cover PNG (`https://raw.githubusercontent.com/ravikiran-srini/ravikirans-marketing/main/...`). For `youtube`, `pdf_url` is empty and `image_url` is `https://img.youtube.com/vi/<id>/maxresdefault.jpg`.
    - `post` (LinkedIn): 60 to 90 words, 2 to 4 short paragraphs. First line a specific claim from the page, under 100 characters. No URL, at most 2 emojis, one genuine question to the reader, no engagement bait. Then "Study guides link in the comments." (course or book: "Link in the comments.", video: "Video link in the comments."). End with 2 hashtags.
    - `comment`: at most 40 words, one practical tip, then a blank line and the link with a short label ("Free study guides: ", "Practice tests: ", "Watch the full video: ").
    - `facebook`: 50 to 80 words, conversational, URL on its own line, then 3 hashtags.
@@ -31,5 +31,5 @@ Runs every day at about 8 AM IST. Prepares today's LinkedIn post (published by M
 6. **Publish.** Set `pdf_url` and `status` = `ready` in `plan.csv`. Commit PDF, cover PNG, `plan.csv` and `today.json` as Ravikiran with no Claude co-author or session lines. Run first: `git config user.name "Ravikiran Srinivasulu" && git config user.email "39718717+ravikiran-srini@users.noreply.github.com"`. Plain message such as `Add <date> <slug> post`. Push: `git -c push.negotiate=true push origin HEAD:main`.
 
 ## If something fails
-- Render fails: still write `today.json` with empty `pdf_url` and `image_url` = `https://raw.githubusercontent.com/ravikiran-srini/ravikirans-carousels/main/brand/logo.png`, set `status` = `failed`. Make then posts the text with the logo.
+- Render fails: still write `today.json` with empty `pdf_url` and `image_url` = `https://raw.githubusercontent.com/ravikiran-srini/ravikirans-marketing/main/brand/logo.png`, set `status` = `failed`. Make then posts the text with the logo.
 - Page cannot be read: write nothing. Make emails the owner that the day was skipped.
