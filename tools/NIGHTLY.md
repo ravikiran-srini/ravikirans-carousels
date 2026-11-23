@@ -17,3 +17,9 @@ Runs every morning at about 8 AM IST. Builds the carousel PDF for today's Linked
 
 ## If anything fails
 Set `status` to `failed` for that row, push `plan.csv` only, and finish. The 7 PM post then goes out as text only.
+
+## Keep the plan filled
+Before step 1, if `plan.csv` has fewer than 14 days of future rows, add rows up to 28 days ahead. Posting days: Mon, Tue, Thu, Sat. Each week: 2 `category`, 1 `youtube`, 1 `course` or `book` (alternate).
+- `category`: pick from `categories.csv` rows with `include` = yes. Choose the one least recently posted (never in the last 6 posts), then the one with more posts. `url` = `https://ravikirans.com/category/<slug>/`.
+- `youtube`, `course`, `book`: take the next unused item from `items.csv` (columns `type,title,url`). If it has none left, leave that day out.
+New rows get `status` = `planned`.

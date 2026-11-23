@@ -1,0 +1,33 @@
+slug,name,posts,include
+salesforce,Salesforce,57,yes
+azure-certification,Azure Certification,41,yes
+red-hat,Red Hat,24,yes
+servicenow,ServiceNow,20,yes
+palo-alto-networks,Palo Alto Networks,15,yes
+splunk,Splunk,14,yes
+gcp,GCP,13,yes
+atlassian,Atlassian,13,yes
+aws-certification,AWS Certification,12,yes
+vmware,VMware/Broadcom,12,yes
+snowflake,Snowflake,11,yes
+nvidia,Nvidia,11,yes
+microsoft-365-certification,Microsoft 365 Certification,11,yes
+uipath,UIPath,9,yes
+comptia,Comptia,9,yes
+databricks,Databricks,8,yes
+power-platform,Power Platform Certification,8,yes
+microsoft-fabric,Microsoft Fabric,6,yes
+microsoft-ai-certification,Microsoft AI Certification,,yes
+microsoft-dynamics-365,Microsoft Dynamics 365,6,yes
+github-certification,GitHub Certification,5,yes
+elastic,Elastic,4,yes
+claude,Claude,4,yes
+confluent,Confluent,3,yes
+hashicorp,Hashicorp,3,yes
+mongodb,MongoDB,3,yes
+devops,DevOps,9,no
+artificial-intelligence,Artificial Intelligence,7,no
+linux-certification,Linux Certification,6,no
+blockchain-certification,Blockchain certification,5,no
+mycourses,My Courses,4,no
+uncategorized,Uncategorized,8,no
