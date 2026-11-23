@@ -86,7 +86,7 @@ def build_html(spec):
             parts.append(f'<section class="slide l">{chrome(i, total, s.get("label", spec["label"]))}<div class="body" style="gap:44px">{body(s, spec)}</div></section>')
     parts.append(f'<section class="slide l">{chrome(total, total, "Free study guides")}<div class="body" style="gap:40px">'
                  f'<h2 style="font-size:78px">{t(spec.get("cta_title", "Free study guides on ravikirans.com."))}</h2>'
-                 f'<a class="cta" href="https://{html.escape(spec["cta"])}" style="font-size:40px"><span>{html.escape(spec["cta"])}</span><span class="arr"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#EE0000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span></a>'
+                 f'<a class="cta" href="https://{html.escape(spec["cta"])}" style="font-size:40px"><span>{html.escape(spec["cta"].replace("/category/", "/"))}</span><span class="arr"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#EE0000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span></a>'
                  f'<div class="card"><h3>Follow Ravikiran Srinivasulu</h3>{SOC}</div></div></section>')
     return f"<!doctype html><html><head><meta charset='utf-8'><style>{CSS}</style></head><body>{''.join(parts)}</body></html>"
 
