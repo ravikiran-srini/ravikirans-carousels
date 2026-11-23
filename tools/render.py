@@ -1,8 +1,11 @@
 """Render a carousel PDF from a JSON spec.
 Usage: python3 tools/render.py spec.json out.pdf [--png-dir DIR]
 Spec: {"label": "Red Hat", "cta": "ravikirans.com/category/red-hat", "slides": [...]}
-Slide types: cover, stat, cards, steps, code, cta (cta is always last and is added automatically).
-In any text, *word* is shown in red."""
+Slide types: cover, stat, cards, steps, code, page, cta (cta is always last and is added automatically).
+A page slide is a dense study page: {"type":"page","kicker":"small label","title":"...","blocks":[...]} with blocks
+  {"kind":"text","text":".."}, {"kind":"rows","rows":[["term","meaning"],..]}, {"kind":"bullets","items":[..]},
+  {"kind":"code","lines":[..]}, {"kind":"note","text":".."}, {"kind":"table","head":[..],"rows":[[..],..]}.
+In any text, *word* is shown in red, **word** in bold, `word` as inline code."""
 import sys, json, html, re, pathlib
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 from brand import icon_svg
@@ -15,7 +18,10 @@ DOTS = '<div class="hd"><i style="background:#FF5F57"></i><i style="background:#
 NAME = 'Ravikiran Srinivasulu · ravikirans.com'
 
 def t(s):
-    return re.sub(r'\*(.+?)\*', r'<span class="red">\1</span>', html.escape(s)).replace('\n', '<br>')
+    e = html.escape(s)
+    e = re.sub(r'\*\*(.+?)\*\*', r'<b>\1</b>', e)
+    e = re.sub(r'`(.+?)`', r'<span class="ic">\1</span>', e)
+    return re.sub(r'\*(.+?)\*', r'<span class="red">\1</span>', e).replace('\n', '<br>')
 
 def chrome(n, total, label):
     return (f'<div class="top"><span class="lg">{icon_svg(52)}{html.escape(label)}</span><span>{n:02d} / {total:02d}</span></div>'
@@ -56,6 +62,22 @@ def body(s, spec):
         x = f'<h2>{t(s["title"])}</h2>' + code_block(s['code'])
         if s.get('note'): x += f'<div class="sub">{t(s["note"])}</div>'
         return x
+    if k == 'page':
+        x = ''
+        if s.get('kicker'): x += f'<div class="kick">{html.escape(s["kicker"])}</div>'
+        x += f'<h2 class="pt">{t(s["title"])}</h2>'
+        for b in s['blocks']:
+            kd = b['kind']
+            if kd == 'text': x += f'<p class="tx">{t(b["text"])}</p>'
+            elif kd == 'note': x += f'<div class="nt">{t(b["text"])}</div>'
+            elif kd == 'bullets': x += '<ul class="bl">' + ''.join(f'<li>{t(i)}</li>' for i in b['items']) + '</ul>'
+            elif kd == 'rows': x += '<div class="rw">' + ''.join(f'<div class="r"><code>{html.escape(a)}</code><span>{t(c)}</span></div>' for a, c in b['rows']) + '</div>'
+            elif kd == 'code': x += code_block(b['lines'])
+            elif kd == 'table':
+                x += '<table class="tb"><tr>' + ''.join(f'<th>{html.escape(h)}</th>' for h in b['head']) + '</tr>' + \
+                     ''.join('<tr>' + ''.join(f'<td>{t(c)}</td>' for c in r) + '</tr>' for r in b['rows']) + '</table>'
+            else: raise ValueError(kd)
+        return x
     raise ValueError(k)
 
 def soc(url, name, icon):
@@ -78,12 +100,12 @@ SOC = ('<div class="socrow">'
 
 FIT_JS = """
 () => {
-  const sel = 'h1,h2,h3,.sub,.row,.row code,.step p,.step p span,.big,.big span,.term pre,.cta';
+  const sel = 'h1,h2,h3,.sub,.row,.row code,.step p,.step p span,.big,.big span,.term pre,.cta,.tx,.nt,.bl li,.r,.r code,.r span,.tb th,.tb td,.kick';
   const over = (sl) => {
     const b = sl.querySelector('.body');
     if (!b) return false;
     if (b.scrollHeight > b.clientHeight + 1) return true;
-    return [...sl.querySelectorAll('h1,h2,.row,.step p,.sub,.term pre,a.cta,.card')].some(e => e.scrollWidth > e.clientWidth + 1);
+    return [...sl.querySelectorAll('h1,h2,.row,.step p,.sub,.term pre,a.cta,.card,.tx,.nt,.r,.tb')].some(e => e.scrollWidth > e.clientWidth + 1);
   };
   let n = 0;
   document.querySelectorAll('.term pre').forEach(e => {
@@ -92,7 +114,8 @@ FIT_JS = """
   });
   document.querySelectorAll('.slide').forEach(sl => {
     let i = 0;
-    while (over(sl) && i++ < 40) {
+    const lim = sl.classList.contains('pg') ? 5 : 40;
+    while (over(sl) && i++ < lim) {
       sl.querySelectorAll(sel).forEach(e => {
         const fs = parseFloat(getComputedStyle(e).fontSize);
         e.style.fontSize = (fs * 0.95) + 'px';
@@ -100,7 +123,7 @@ FIT_JS = """
       n++;
     }
   });
-  return n;
+  return [...document.querySelectorAll('.slide')].map((sl, k) => over(sl) ? k + 1 : 0).filter(x => x);
 }
 """
 
@@ -115,7 +138,8 @@ def build_html(spec):
                          f'<div class="foot"><span>{NAME}</span><span class="sw">Swipe →</span></div>'
                          f'<div class="bar" style="width:{round(100 / total)}%"></div></section>')
         else:
-            parts.append(f'<section class="slide l">{chrome(i, total, s.get("label", spec["label"]))}<div class="body" style="gap:44px">{body(s, spec)}</div></section>')
+            pg = s['type'] == 'page'
+            parts.append(f'<section class="slide l{" pg" if pg else ""}">{chrome(i, total, s.get("label", spec["label"]))}<div class="body" style="gap:44px">{body(s, spec)}</div></section>')
     parts.append(f'<section class="slide l">{chrome(total, total, spec.get("cta_label", "Free study guides"))}<div class="body" style="gap:40px">'
                  f'<h2 style="font-size:78px">{t(spec.get("cta_title", "Free study guides on ravikirans.com."))}</h2>'
                  f'<a class="cta" href="https://{html.escape(spec["cta"])}" style="font-size:{min(60, int(730 / (0.52 * len(spec["cta"].replace("/category/", "/")))))}px"><span style="white-space:nowrap">{html.escape(spec["cta"].replace("/category/", "/"))}</span><span class="arr"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#EE0000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span></a>'
@@ -141,7 +165,8 @@ def main():
         pg2 = b.new_page(viewport={'width': W, 'height': H}, device_scale_factor=2)
         pg2.goto(f'file://{hp.resolve()}')
         pg2.wait_for_timeout(500)
-        pg2.evaluate(FIT_JS)
+        bad = pg2.evaluate(FIT_JS)
+        if bad: print('TOO DENSE (trim text): pages', bad, file=sys.stderr)
         els = pg2.query_selector_all('.slide')
         links = pg2.evaluate("""() => [...document.querySelectorAll('.slide')].map(sl => {
             const r0 = sl.getBoundingClientRect();
