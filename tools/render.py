@@ -65,11 +65,15 @@ LI_PATH = "M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2
 FB_PATH = "M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"
 SOC = ('<div class="socrow">'
        + soc('linkedin.com/company/ravikirans', 'LinkedIn',
-             f'<svg width="120" height="120" viewBox="0 0 24 24"><rect width="24" height="24" rx="3.6" fill="#fff"/><path fill="#0A66C2" d="{LI_PATH}"/></svg>')
+             f'<svg width="100" height="100" viewBox="0 0 24 24"><rect width="24" height="24" rx="3.6" fill="#fff"/><path fill="#0A66C2" d="{LI_PATH}"/></svg>')
        + soc('facebook.com/ravikiran.srinivasulu', 'Facebook',
-             f'<svg width="120" height="120" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11.9" fill="#fff"/><path fill="#1877F2" d="{FB_PATH}"/></svg>')
+             f'<svg width="100" height="100" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11.9" fill="#fff"/><path fill="#1877F2" d="{FB_PATH}"/></svg>')
        + soc('youtube.com/c/ravikirans', 'YouTube',
-             '<svg width="120" height="120" viewBox="0 0 64 64"><rect y="8" width="64" height="48" rx="14" fill="#FF0000"/><polygon points="26,20 26,44 46,32" fill="#fff"/></svg>')
+             '<svg width="100" height="100" viewBox="0 0 64 64"><rect y="8" width="64" height="48" rx="14" fill="#FF0000"/><polygon points="26,20 26,44 46,32" fill="#fff"/></svg>')
+       + soc('udemy.com/user/ravikiran-srinivasulu', 'Udemy',
+             '<svg width="100" height="100" viewBox="0 0 24 24"><rect width="24" height="24" rx="3.6" fill="#fff"/><path d="M7.5 5.5v7.2a4.5 4.5 0 0 0 9 0V5.5" fill="none" stroke="#A435F0" stroke-width="2.8" stroke-linecap="round"/></svg>')
+       + soc('leanpub.com/u/ravikirans', 'Leanpub',
+             '<svg width="100" height="100" viewBox="0 0 24 24"><rect width="24" height="24" rx="3.6" fill="#fff"/><path d="M12 8C9.6 6.3 7 6 4.5 6.8v10.4c2.5-.8 5.1-.5 7.5 1.2 2.4-1.700 5-2 7.500-1.200V6.800C17 6 14.400 6.300 12 8zM12 8v10.400" fill="none" stroke="#2B7BB9" stroke-width="1.800" stroke-linejoin="round" stroke-linecap="round"/></svg>')
        + '</div>')
 
 FIT_JS = """
@@ -82,6 +86,10 @@ FIT_JS = """
     return [...sl.querySelectorAll('h1,h2,.row,.step p,.sub,.term pre,a.cta,.card')].some(e => e.scrollWidth > e.clientWidth + 1);
   };
   let n = 0;
+  document.querySelectorAll('.term pre').forEach(e => {
+    let i = 0;
+    while (e.scrollWidth > e.clientWidth + 1 && i++ < 40) e.style.fontSize = (parseFloat(getComputedStyle(e).fontSize) * 0.95) + 'px';
+  });
   document.querySelectorAll('.slide').forEach(sl => {
     let i = 0;
     while (over(sl) && i++ < 40) {
@@ -126,11 +134,33 @@ def main():
         pg.goto(f'file://{hp.resolve()}')
         pg.wait_for_timeout(500)
         pg.evaluate(FIT_JS)
-        pg.pdf(path=str(out), width=f'{W}px', height=f'{H}px', print_background=True)
-        if png:
-            png.mkdir(parents=True, exist_ok=True)
-            for i, el in enumerate(pg.query_selector_all('.slide'), 1):
-                el.screenshot(path=str(png / f'{i}.png'))
+        # Pages are flat images with real link areas on top: identical in every browser, Acrobat, Preview and phone viewer.
+        from reportlab.pdfgen import canvas
+        from PIL import Image
+        import io
+        pg2 = b.new_page(viewport={'width': W, 'height': H}, device_scale_factor=2)
+        pg2.goto(f'file://{hp.resolve()}')
+        pg2.wait_for_timeout(500)
+        pg2.evaluate(FIT_JS)
+        els = pg2.query_selector_all('.slide')
+        links = pg2.evaluate("""() => [...document.querySelectorAll('.slide')].map(sl => {
+            const r0 = sl.getBoundingClientRect();
+            return [...sl.querySelectorAll('a[href]')].map(a => { const r = a.getBoundingClientRect();
+              return {url: a.href, x: r.left - r0.left, y: r.top - r0.top, w: r.width, h: r.height}; }); })""")
+        k = 0.75  # px -> pt
+        cv = canvas.Canvas(str(out), pagesize=(W * k, H * k))
+        cv.setTitle(spec['label']); cv.setAuthor('Ravikiran Srinivasulu')
+        if png: png.mkdir(parents=True, exist_ok=True)
+        for i, el in enumerate(els, 1):
+            im = Image.open(io.BytesIO(el.screenshot(type='png'))).convert('RGB')
+            if png: im.resize((W, H), Image.LANCZOS).save(png / f'{i}.png')
+            buf = io.BytesIO(); im.save(buf, 'JPEG', quality=92, subsampling=0, optimize=True); buf.seek(0)
+            from reportlab.lib.utils import ImageReader
+            cv.drawImage(ImageReader(buf), 0, 0, W * k, H * k)
+            for a in links[i - 1]:
+                cv.linkURL(a['url'], (a['x'] * k, (H - a['y'] - a['h']) * k, (a['x'] + a['w']) * k, (H - a['y']) * k), relative=0, thickness=0)
+            cv.showPage()
+        cv.save()
         b.close()
     hp.unlink()
 

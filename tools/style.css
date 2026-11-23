@@ -26,7 +26,7 @@ h2{font-size:86px;line-height:1.04;font-weight:800;letter-spacing:-.02em}
  box-shadow:0 30px 80px rgba(0,0,0,.55)}
 .term .hd{height:58px;background:#111827;display:flex;align-items:center;gap:14px;padding:0 26px}
 .term .hd i{width:18px;height:18px;border-radius:50%;display:block}
-.term pre{font-family:'DejaVu Sans Mono',monospace;font-size:35px;line-height:1.7;padding:30px 36px;color:#E5E9F2;white-space:pre-wrap}
+.term pre{font-family:'DejaVu Sans Mono',monospace;font-size:35px;line-height:1.7;padding:30px 36px;color:#E5E9F2;white-space:pre}
 .term .p{color:#FF3B3B}.term .c{color:#6EE7B7}.term .d{color:#7C879D}
 .card{background:rgba(255,255,255,.055);border:2px solid rgba(255,255,255,.10);border-radius:28px;padding:36px 40px}
 .card h3{font-size:30px;letter-spacing:.12em;text-transform:uppercase;color:#FF3B3B;margin-bottom:18px;font-weight:700}
@@ -35,7 +35,7 @@ h2{font-size:86px;line-height:1.04;font-weight:800;letter-spacing:-.02em}
  border-radius:10px;padding:2px 14px;font-size:32px;flex:none}
 .step{display:flex;gap:34px;align-items:center}
 .step .n{flex:none;width:112px;height:112px;border-radius:50%;background:#EE0000;display:flex;
- align-items:center;justify-content:center;font-size:58px;font-weight:800}
+ align-items:center;justify-content:center;font-size:58px;font-weight:800;color:#fff}
 .step p{font-size:46px;line-height:1.25;font-weight:600}
 .step p span{display:block;font-size:34px;color:#9AA4B8;font-weight:500;margin-top:6px}
 .big{font-size:230px;font-weight:800;line-height:.95;letter-spacing:-.04em;
@@ -58,7 +58,7 @@ h2{font-size:86px;line-height:1.04;font-weight:800;letter-spacing:-.02em}
 a{color:inherit;text-decoration:none}
 .l a.cta{display:block}
 .l a.soc{text-decoration:none}
-.l .socrow{display:flex;justify-content:flex-start;gap:64px;align-items:center;margin:50px 0 10px}
+.l .socrow{display:flex;justify-content:flex-start;gap:40px;align-items:center;margin:50px 0 10px}
 .l .socrow a.soc{margin:0;display:block;line-height:0}
 .l a.cta{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:28px 36px 28px 44px;box-shadow:0 8px 0 #A80000,0 16px 30px rgba(238,0,0,.28)}
 .l a.cta .arr{flex:none;width:76px;height:76px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center}
