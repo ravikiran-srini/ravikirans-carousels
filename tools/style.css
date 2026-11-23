@@ -54,3 +54,7 @@ h2{font-size:86px;line-height:1.04;font-weight:800;letter-spacing:-.02em}
 .l .soc{display:flex;gap:24px;align-items:center;font-size:34px;color:#1B2434;font-weight:500;margin:14px 0}
 .l .soc svg{flex:none}
 .l .cta{color:#fff}
+
+a{color:inherit;text-decoration:none}
+.l a.cta{display:block}
+.l a.soc{text-decoration:none}
