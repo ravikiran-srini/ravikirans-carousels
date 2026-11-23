@@ -5,12 +5,14 @@ Runs every day at about 8 AM IST. Prepares today's LinkedIn post (published by M
 ## Steps
 1. **Refresh lists.** Add anything new, never remove or reorder existing rows.
    - `categories.csv`: from `https://ravikirans.com/wp-json/wp/v2/categories?per_page=100`. A new category with at least 3 posts gets `include` = yes if it is a vendor or certification, otherwise no.
-   - `items.csv`: courses from `https://ravikirans.com/ravikiran-srinivasulu-udemy-courses/`, books from `https://leanpub.com/u/ravikirans`. Videos are added only by the owner.
-2. **Choose today's item** (IST). If `plan.csv` has a row for today, use it. Otherwise: Mon and Tue = `category`; Thu = `youtube`; Sat = `course` or `book`, whichever was posted less recently. Other days: stop.
-   - Within a type, take the item posted least recently (never posted first; ties: more posts first for categories). `plan.csv` is the history of what was posted.
-   - If a type has no items, use `category`.
+   - `items.csv`: courses from `https://ravikirans.com/ravikiran-srinivasulu-udemy-courses/`, books from `https://leanpub.com/u/ravikirans`, videos from the Make data store 262859, key `ytfeed` (the channel's latest uploads as RSS, refreshed daily; read it with the Make tool `data-store-records_list`). If a source cannot be read, skip it.
+   - For every new item, check that its exam is still current (vendor exam list or web search). If the exam is retired or replaced, add the row with `skip` = yes. Never delete rows.
+2. **Choose today's item** (IST). Posting days: Mon, Tue, Thu, Sat; other days stop. If `plan.csv` has a row for today, use it. Otherwise choose the type:
+   - `youtube`, `course` and `book` are eligible only if they have an item with `skip` empty and no post of that type in the last 7 days. Never two non-category posts in a row.
+   - Among eligible types take the one posted longest ago (never posted first). If none is eligible, use `category`.
+   - Within a type take the item posted least recently (never posted first; ties: more posts first for categories). `plan.csv` is the history of what was posted.
    - Add the row to `plan.csv`: `date,type,title,url,pdf_url,status` with `status` = `planned`.
-3. **Read the page** at the row's `url` (for `youtube`, the video page). Use only facts on it. Never invent exam codes, prices, percentages or claims.
+3. **Read the page** at the row's `url` (for `youtube`, use the title and description from the feed). Use only facts on it. Never invent exam codes, prices, percentages or claims.
 4. **Carousel** (not for `youtube`): write a spec JSON as in `tools/example_red_hat.json`, 5 to 7 slides plus the automatic last slide.
    - Slide 1 `cover`: one hook (surprising fact or common mistake), at most 12 words, key word in `*stars*`.
    - Middle slides: `stat`, `cards`, `steps` or `code`. Headings at most 8 words, plain language, no emojis.
