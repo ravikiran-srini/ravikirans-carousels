@@ -28,5 +28,5 @@ Runs every day at about 8 AM IST. Prepares today's LinkedIn post (published by M
 6. **Publish.** Set `pdf_url` and `status` = `ready` in `plan.csv`. Commit PDF, cover PNG, `plan.csv` and `today.json` as Ravikiran with no Claude co-author or session lines. Run first: `git config user.name "Ravikiran Srinivasulu" && git config user.email "39718717+ravikiran-srini@users.noreply.github.com"`. Plain message such as `Add <date> <slug> post`. Push: `git -c push.negotiate=true push origin HEAD:main`.
 
 ## If something fails
-- Render fails: still write `today.json` with empty `pdf_url` and `image_url`, set `status` = `failed`. Make then posts text only.
+- Render fails: still write `today.json` with empty `pdf_url` and `image_url` = `https://raw.githubusercontent.com/ravikiran-srini/ravikirans-carousels/main/brand/logo.png`, set `status` = `failed`. Make then posts the text with the logo.
 - Page cannot be read: write nothing. Make emails the owner that the day was skipped.
