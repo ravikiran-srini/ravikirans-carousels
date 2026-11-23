@@ -58,15 +58,17 @@ def body(s, spec):
         return x
     raise ValueError(k)
 
-def soc(url, label, icon):
-    return f'<a class="soc" href="https://{url}">{icon}{label}</a>'
+def soc(url, name, icon):
+    return f'<a class="soc" href="https://{url}" title="{name}">{icon}</a>'
 
-SOC = (soc('linkedin.com/company/ravikirans', 'linkedin.com/company/ravikirans',
-           '<svg width="64" height="64" viewBox="0 0 64 64"><rect width="64" height="64" rx="15" fill="#0A66C2"/><text x="32" y="44" font-family="Inter" font-weight="800" font-size="30" text-anchor="middle" fill="#fff">in</text></svg>')
-       + soc('facebook.com/ravikiran.srinivasulu', 'facebook.com/ravikiran.srinivasulu',
-             '<svg width="64" height="64" viewBox="0 0 64 64"><circle cx="32" cy="32" r="32" fill="#1877F2"/><text x="35" y="52" font-family="Inter" font-weight="800" font-size="46" text-anchor="middle" fill="#fff">f</text></svg>')
-       + soc('youtube.com/c/ravikirans', 'youtube.com/c/ravikirans',
-             '<svg width="64" height="64" viewBox="0 0 64 64"><rect y="8" width="64" height="48" rx="14" fill="#FF0000"/><polygon points="26,20 26,44 46,32" fill="#fff"/></svg>'))
+SOC = ('<div class="socrow">'
+       + soc('linkedin.com/company/ravikirans', 'LinkedIn',
+             '<svg width="120" height="120" viewBox="0 0 64 64"><rect width="64" height="64" rx="15" fill="#0A66C2"/><text x="32" y="44" font-family="Inter" font-weight="800" font-size="30" text-anchor="middle" fill="#fff">in</text></svg>')
+       + soc('facebook.com/ravikiran.srinivasulu', 'Facebook',
+             '<svg width="120" height="120" viewBox="0 0 64 64"><circle cx="32" cy="32" r="32" fill="#1877F2"/><text x="35" y="52" font-family="Inter" font-weight="800" font-size="46" text-anchor="middle" fill="#fff">f</text></svg>')
+       + soc('youtube.com/c/ravikirans', 'YouTube',
+             '<svg width="120" height="120" viewBox="0 0 64 64"><rect y="8" width="64" height="48" rx="14" fill="#FF0000"/><polygon points="26,20 26,44 46,32" fill="#fff"/></svg>')
+       + '</div>')
 
 def build_html(spec):
     slides = spec['slides']
