@@ -72,6 +72,30 @@ SOC = ('<div class="socrow">'
              '<svg width="120" height="120" viewBox="0 0 64 64"><rect y="8" width="64" height="48" rx="14" fill="#FF0000"/><polygon points="26,20 26,44 46,32" fill="#fff"/></svg>')
        + '</div>')
 
+FIT_JS = """
+() => {
+  const sel = 'h1,h2,h3,.sub,.row,.row code,.step p,.step p span,.big,.big span,.term pre,.cta';
+  const over = (sl) => {
+    const b = sl.querySelector('.body');
+    if (!b) return false;
+    if (b.scrollHeight > b.clientHeight + 1) return true;
+    return [...sl.querySelectorAll('h1,h2,.row,.step p,.sub,.term pre,a.cta,.card')].some(e => e.scrollWidth > e.clientWidth + 1);
+  };
+  let n = 0;
+  document.querySelectorAll('.slide').forEach(sl => {
+    let i = 0;
+    while (over(sl) && i++ < 40) {
+      sl.querySelectorAll(sel).forEach(e => {
+        const fs = parseFloat(getComputedStyle(e).fontSize);
+        e.style.fontSize = (fs * 0.95) + 'px';
+      });
+      n++;
+    }
+  });
+  return n;
+}
+"""
+
 def build_html(spec):
     slides = spec['slides']
     total = len(slides) + 1
@@ -86,7 +110,7 @@ def build_html(spec):
             parts.append(f'<section class="slide l">{chrome(i, total, s.get("label", spec["label"]))}<div class="body" style="gap:44px">{body(s, spec)}</div></section>')
     parts.append(f'<section class="slide l">{chrome(total, total, "Free study guides")}<div class="body" style="gap:40px">'
                  f'<h2 style="font-size:78px">{t(spec.get("cta_title", "Free study guides on ravikirans.com."))}</h2>'
-                 f'<a class="cta" href="https://{html.escape(spec["cta"])}" style="font-size:{min(60, int(730 / (0.52 * len(spec["cta"].replace("/category/", "/")))))}px"><span>{html.escape(spec["cta"].replace("/category/", "/"))}</span><span class="arr"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#EE0000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span></a>'
+                 f'<a class="cta" href="https://{html.escape(spec["cta"])}" style="font-size:{min(60, int(730 / (0.52 * len(spec["cta"].replace("/category/", "/")))))}px"><span style="white-space:nowrap">{html.escape(spec["cta"].replace("/category/", "/"))}</span><span class="arr"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#EE0000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span></a>'
                  f'<div class="card"><h3>Follow Ravikiran Srinivasulu</h3>{SOC}</div></div></section>')
     return f"<!doctype html><html><head><meta charset='utf-8'><style>{CSS}</style></head><body>{''.join(parts)}</body></html>"
 
@@ -101,6 +125,7 @@ def main():
         pg = b.new_page(viewport={'width': W, 'height': H})
         pg.goto(f'file://{hp.resolve()}')
         pg.wait_for_timeout(500)
+        pg.evaluate(FIT_JS)
         pg.pdf(path=str(out), width=f'{W}px', height=f'{H}px', print_background=True)
         if png:
             png.mkdir(parents=True, exist_ok=True)
