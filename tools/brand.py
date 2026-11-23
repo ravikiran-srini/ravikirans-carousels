@@ -1,0 +1,12 @@
+RED, NAVY, CORAL = '#EE0000', '#0A0E1A', '#FF7A5C'
+def sparkle(cx, cy, s, fill=CORAL):
+    return (f'<path transform="translate({cx} {cy}) scale({s})" fill="{fill}" '
+            'd="M0,-10 Q1.2,-1.2 10,0 Q1.2,1.2 0,10 Q-1.2,1.2 -10,0 Q-1.2,-1.2 0,-10Z"/>')
+def icon_svg(size, gid='g'):
+    grad = (f'<defs><linearGradient id="{gid}" gradientUnits="userSpaceOnUse" x1="10" y1="10" x2="90" y2="90">'
+            f'<stop offset="0" stop-color="#FF4A3D"/><stop offset="1" stop-color="{RED}"/></linearGradient></defs>')
+    rib = '<g fill="#B50000"><polygon points="36,66 29,98 41,90 48,98 52,68"/><polygon points="64,66 71,98 59,90 52,98 48,68"/></g>'
+    hexm = (f'<polygon points="50,4 83,23 83,61 50,80 17,61 17,23" fill="url(#{gid})"/>'
+            '<polygon points="50,12 76,27 76,57 50,72 24,57 24,27" fill="none" stroke="#fff" stroke-opacity=".4" stroke-width="2.2"/>')
+    tick = '<path d="M35 44 L46 55 L66 30" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>'
+    return f'<svg width="{size}" height="{size}" viewBox="0 0 100 100">{grad}{rib}{hexm}{tick}{sparkle(85,15,1.7)}{sparkle(70,6,.8)}</svg>'

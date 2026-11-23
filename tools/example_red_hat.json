@@ -1,0 +1,10 @@
+{"label": "Red Hat certification", "cta": "ravikirans.com/category/red-hat", "cta_title": "Free study guides for every Red Hat exam.",
+ "slides": [
+  {"type": "cover", "title": "Red Hat exams have *NO* multiple choice.", "sub": "Here is how to prepare.", "code": ["$ systemctl enable --now httpd", "$ firewall-cmd --reload", "success"]},
+  {"type": "stat", "title": "A live system.\nReal tasks.", "value": "210", "suffix": "/300", "text": "RHCSA (EX200) pass mark: 70%. You do the work. Nobody picks A, B, C or D."},
+  {"type": "cards", "title": "Pick your specialist exam.", "groups": [
+    {"title": "Ansible", "rows": [["EX467", "Automation Platform"], ["EX457", "Network Automation"]]},
+    {"title": "OpenShift", "rows": [["EX432", "Advanced Cluster Mgmt"], ["EX430", "Advanced Cluster Security"]]}]},
+  {"type": "steps", "title": "How to practise.", "steps": [["Build a lab VM", "Break it. Rebuild it."], ["Type every objective", "From memory, not from notes."], ["Reboot and re-check", "If it is gone, it was not done."]]},
+  {"type": "code", "label": "Common mistake", "title": "It works now. *Gone after reboot.*", "code": ["$ systemctl enable --now httpd", "$ firewall-cmd --permanent --add-service=http", "$ firewall-cmd --reload", "# mounts go in /etc/fstab"], "note": "Enable services. Add --permanent."}
+ ]}
