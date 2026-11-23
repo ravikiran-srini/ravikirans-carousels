@@ -17,7 +17,7 @@ Runs every day at about 8 AM IST. Prepares today's LinkedIn post (published by M
 4. **Carousel** (not for `youtube`): write a spec JSON as in `tools/example_red_hat.json`, 5 to 7 slides plus the automatic last slide.
    - Slide 1 `cover`: one hook (surprising fact or common mistake), at most 12 words, key word in `*stars*`.
    - Middle slides: `stat`, `cards`, `steps` or `code`. Headings at most 8 words, plain language, no emojis.
-   - `cta`: the row's `url` without `https://`. `label`: the category, course, book or post name. For a course or book show what the learner gets, and the real link.
+   - `cta`: the row's `url` without `https://`. `label`: the category, course, book or post name. For a course or book show what the learner gets and the real link, and set `cta_label` and `cta_title` without the word free.
    - Render: `python3 tools/render.py spec.json carousels/<date>-<slug>.pdf --png-dir /tmp/png`. Look at the PNGs, fix overflow or overlap, render again.
    - Save slide 1 as `carousels/<date>-<slug>-cover.png`.
 5. **Write `today.json`** in the repo root, with keys `date, type, title, url, pdf_url, image_url, post, comment, facebook, x, page_text`.
