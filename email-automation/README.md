@@ -1,6 +1,6 @@
 # Email automation: handoff
 
-Newsletter system for ravikirans.com. Free, self-hosted. Last updated 25 Nov 2026.
+Newsletter system for ravikirans.com. Free, self-hosted. Last updated 25 Nov 2026 (draft built).
 No passwords or API keys are stored here (this repo is public). Credentials live in the plugins on the site.
 
 ## Goal
@@ -31,11 +31,12 @@ No passwords or API keys are stored here (this repo is public). Credentials live
 4. When the list reaches about 7,000 to 8,000: move to Amazon SES and send to everyone at once (no batches).
 
 ## Pending
-- Postal address for the email footer (needed by law). Not given yet.
-- Welcome-back draft (subject "Still want exam-prep tips?", sender Ravikiran Srinivasulu, button to ravikirans.com, unsubscribe link, address footer) is only drafted in chat. Build it in FluentCRM as a DRAFT for Batch 01 and show it to Ravikiran. Do NOT send without his go-ahead.
-- Build the daily rotation (one campaign per Batch tag per day).
-- Check that the free FluentCRM REST API can create and schedule campaigns, then build the weekly Claude task.
-- Optional: real server cron, WordPress update (7.1.5 available).
+- Footer details (needed by law): FluentCRM > Settings > Business Setup has empty Business Name and Full business address. The draft footer uses these. Ask Ravikiran for the postal address.
+- Welcome-back DRAFT exists: campaign id 1 "Welcome back - Batch 01", status draft, subject "Still want exam-prep tips?", list Newsletter + tag Batch 01 (266 contacts confirmed in the UI), from Ravikiran Srinivasulu <contact@ravikirans.com>. Body is short, with a button to ravikirans.com. Show it to Ravikiran. Do NOT schedule or send without his go-ahead.
+- Daily rotation (one campaign per Batch tag, 02 to 15): clone campaign 1 via the API with a different tag. Not built yet.
+- Schedule endpoint (POST /campaigns/{id}/schedule) is untested on purpose: it would send. Test only with a one-contact test tag.
+- Weekly Claude scheduled task: not built.
+- Optional: real server cron, WordPress update (8 updates pending).
 
 ## Amazon SES (researched 25 Nov 2026, for later)
 - New accounts: Essentials plan, $0.16 per 1,000 emails. Old $0.10 rate is gone for new accounts.
@@ -57,6 +58,9 @@ No passwords or API keys are stored here (this repo is public). Credentials live
   - Bulk tag: POST /subscribers/do-bulk-action with `{action_name:"add_to_tags", subscriber_ids:[...], action_options:[tagId]}`.
   - Create contact: POST /subscribers with `{email, status:"subscribed", lists:[1], tags:[2]}`.
   - `/subscribers/sync-segments` did not work for bulk tagging.
+  - Campaigns (verified 25 Nov): `POST /campaigns {title}` creates a draft; then `PUT /campaigns/{id}` with `{title, email_subject, email_pre_header, email_body, design_template:"simple", settings}` fills it. Recipients go in `settings.subscribers:[{list:"1",tag:"3"}]`, `sending_filter:"list_tag"`; custom sender in `settings.mailer_settings` with `is_custom:"yes"`. Merge into the settings returned by the POST instead of replacing them. `GET /campaigns/{id}` returns `{campaign:{...}}`; the POST response is not wrapped, so list `/campaigns` to get the id.
+  - `POST /campaigns/estimated-contacts` returned 0 for a valid tag. Do not trust it; the campaign Recipients step in the UI shows the real count (`#/email/campaigns/{id}?step=2`).
+  - Setting `location.hash` to an unknown FluentCRM route bounces to the dashboard. Use the sidebar links.
 - Built-in browser REPL: `tab.click(x,y)` uses full-resolution coordinates; no file upload there.
 - Ravikiran prefers short answers in simple language, and automation over manual steps. His first name is one word: "Ravikiran".
 - Never send to the list without his approval.
