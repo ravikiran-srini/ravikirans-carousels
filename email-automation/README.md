@@ -1,6 +1,6 @@
 # Email automation: handoff
 
-Newsletter system for ravikirans.com. Free, self-hosted. Last updated 25 Nov 2026 (draft built).
+Newsletter system for ravikirans.com. Free, self-hosted. Last updated 25 Nov 2026 (SES decided).
 No passwords or API keys are stored here (this repo is public). Credentials live in the plugins on the site.
 
 ## Goal
@@ -13,7 +13,7 @@ No passwords or API keys are stored here (this repo is public). Credentials live
 - WordPress on Hostinger. FluentCRM 3.3.5 (free) holds contacts. Fluent Forms form id 3 is the signup form.
 - Math captcha: add-on "Custom Captcha Field for Fluent Forms", single digit, answer at most 9. It was patched in `Bootstrap.php`; a plugin update will undo the patch.
 - Pop-up: Code Snippets plugin, snippet id 10. Shows after 3 to 5 s, no confirmation email.
-- Sending: FluentSMTP, connection type Brevo (Sendinblue) API. Brevo free = 300 emails/day. Sender: contact@ravikirans.com. Domain ravikirans.com is authenticated in Brevo (DKIM, brevo-code, DMARC with rua). Test email delivered.
+- Sending (until the SES switch below): FluentSMTP, connection type Brevo (Sendinblue) API. Brevo free = 300 emails/day. Sender: contact@ravikirans.com. Domain ravikirans.com is authenticated in Brevo (DKIM, brevo-code, DMARC with rua). Test email delivered.
 - Brevo API IP blocking is off (it blocked the Hostinger server's changing IPv6). SMTP key IP blocking is off.
 - FluentSMTP has no daily cap setting. Weekly Email Summary is on.
 - "Server-side cron" is off, so FluentCRM runs on WP cron (page visits). A real Hostinger cron is a later option.
@@ -24,11 +24,18 @@ No passwords or API keys are stored here (this repo is public). Credentials live
 - 3,979 contacts imported from the old Brevo list, all subscribed, all on Newsletter, all tagged "Old list", each in exactly one Batch tag (266 or 265 per batch).
 - Junk addresses are still inside (a@b.com, aaa.pl@pl.pl and similar). Remove after the first send.
 
-## Plan agreed
-1. Welcome-back email to the old list, one batch per day (Batch 01 to 15), about 280 per day so site emails still fit under 300.
-2. After each batch: read Brevo delivery logs, mark hard bounces as "Bounced", remove unsubscribes, resend failures. To be a daily scheduled task.
+## Plan agreed (revised 26 Nov 2026: Brevo replaced by Amazon SES)
+1. Send the welcome-back email through Amazon SES, not 300/day Brevo batches. Send Batch 01 (266) first, check the SES bounce rate, then send the rest at once. Clean junk addresses before sending: AWS reviews at about 5% hard bounces and may pause at 10%.
+2. After each send: read bounces and complaints, mark hard bounces "Bounced", remove unsubscribes. Later a scheduled task.
 3. Review who opens and clicks. Keep the engaged.
-4. When the list reaches about 7,000 to 8,000: move to Amazon SES and send to everyone at once (no batches).
+
+## SES migration (decided 26 Nov 2026)
+Brevo stays the working sender until an SES test email is delivered. Then remove it.
+- AWS account: Ravikiran used one 7 to 8 years ago, so he is not eligible for the $200 credits (AWS FAQ). Pay as you go, about $3 to $5 a month at 8,000 subscribers x 4 sends. Try "forgot password" on the old account first; otherwise create a new one with contact@ravikirans.com, email and password, then enable root MFA. Status: not signed in to AWS in the built-in browser yet.
+- He must do himself: create or sign in to the AWS account; paste the SES access key and secret into FluentSMTP (Claude cannot enter keys or passwords).
+- Claude does: verify ravikirans.com in SES (DKIM records in Hostinger DNS), bounce and complaint handling (SNS), production-access request (new accounts start in the sandbox, verified recipients only), add the SES connection in FluentSMTP, send a test, make SES the default, delete the Brevo connection in FluentSMTP.
+- Ask before: deleting the Brevo account or its DNS records (brevo-code, DKIM). Permanent.
+- Hostinger: enable 2FA on the hPanel account and optionally the mailbox (Webmail > All Settings > Account).
 
 ## Pending
 - Footer details (needed by law): FluentCRM > Settings > Business Setup has empty Business Name and Full business address. The draft footer uses these. Ask Ravikiran for the postal address.
