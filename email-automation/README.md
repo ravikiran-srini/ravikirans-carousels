@@ -29,13 +29,20 @@ No passwords or API keys are stored here (this repo is public). Credentials live
 2. After each send: read bounces and complaints, mark hard bounces "Bounced", remove unsubscribes. Later a scheduled task.
 3. Review who opens and clicks. Keep the engaged.
 
-## SES migration (decided 26 Nov 2026)
-Brevo stays the working sender until an SES test email is delivered. Then remove it.
-- AWS account: Ravikiran used one 7 to 8 years ago, so he is not eligible for the $200 credits (AWS FAQ). Pay as you go, about $3 to $5 a month at 8,000 subscribers x 4 sends. Try "forgot password" on the old account first; otherwise create a new one with contact@ravikirans.com, email and password, then enable root MFA. Status: not signed in to AWS in the built-in browser yet.
-- He must do himself: create or sign in to the AWS account; paste the SES access key and secret into FluentSMTP (Claude cannot enter keys or passwords).
-- Claude does: verify ravikirans.com in SES (DKIM records in Hostinger DNS), bounce and complaint handling (SNS), production-access request (new accounts start in the sandbox, verified recipients only), add the SES connection in FluentSMTP, send a test, make SES the default, delete the Brevo connection in FluentSMTP.
-- Ask before: deleting the Brevo account or its DNS records (brevo-code, DKIM). Permanent.
-- Hostinger: enable 2FA on the hPanel account and optionally the mailbox (Webmail > All Settings > Account).
+## SES migration (status 26 Nov 2026, 23:30 IST)
+Done:
+- New AWS account (Builder ID + project, activated 26 Nov 2026) for contact@ravikirans.com. Free plan: only region ap-southeast-2 (Sydney) is allowed; other regions need a paid plan. Console sign-in: choose "Change to new experience" on the classic sign-in page, then enter the email (code goes to his Gmail via the Hostinger forwarder).
+- SES domain identity ravikirans.com in Sydney: Easy DKIM, 3 CNAMEs added in Hostinger DNS, status Verified.
+- IAM user fluentsmtp-ses (AmazonSESFullAccess). He created the access key himself and pasted it into FluentSMTP.
+- FluentSMTP now has one connection: Amazon SES, ap-southeast-2, From contact@ravikirans.com, Default. Brevo connection is gone. Test email delivered via SES in 1.25 s and arrived in Gmail.
+- Production access requested (Marketing, https://ravikirans.com). Status Under review, up to 96 hours. Until approved: sandbox, 200 emails a day, 1 a second, recipients must be verified (any address @ravikirans.com counts).
+Remaining:
+- Do NOT send campaigns until production access is approved.
+- Bounce and complaint handling: SES account-level suppression list is on by default. Optional extra: SNS topic plus FluentCRM bounce webhook.
+- Optional: tighten the IAM policy to ses:SendRawEmail only; add include:amazonses.com to the SPF TXT record.
+- Ask before deleting the Brevo account or its DNS records (brevo-code TXT, brevo1/brevo2 DKIM CNAMEs, _dmarc rua to brevo). Permanent.
+- AWS root MFA still to enable (his step). The mailbox plan (Hostinger free business email) expires 2029-07-29, auto-renew off: renew it or add a second recovery email on AWS.
+- Hostinger hPanel and Webmail 2FA are on.
 
 ## Pending
 - Footer details (needed by law): FluentCRM > Settings > Business Setup has empty Business Name and Full business address. The draft footer uses these. Ask Ravikiran for the postal address.
