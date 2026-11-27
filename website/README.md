@@ -4,6 +4,12 @@ Site work for ravikirans.com (WordPress on Hostinger, Olsen Light theme). Last u
 Newsletter, SES and the email list are a separate chat: see `../email-automation/README.md`. Do not work on SES here.
 No passwords, keys or tokens in this repo (it is public).
 
+## Read first: keep the repo current, warn about compaction
+- After EVERY message turn, write everything from that turn into the files in this repo before replying: what was done, decisions, what he agreed and disagreed with, rules, open questions, next steps. Commit and push each time. Nothing may live only in the chat; assume the chat can be compacted at any moment and the repo is the only memory.
+- Keep this file and the index in `../README.md` accurate and free of repetition. Put new topics in their own file and add them to the index.
+- Compaction reminder: the moment you notice the chat has been compacted (a summary replaces earlier messages), tell Ravikiran in your next reply, in one line. Say that everything is saved in GitHub, then re-read `README.md` and this file before continuing. Also tell him when the chat has become very long, so he can start a new one with the prompt in his handoff.
+- At the start of every new chat: read `README.md`, then this file, then continue. Do not ask him for context that is written here.
+
 ## Standing rules
 - His first name is one word: "Ravikiran". Short answers, simple language. He dislikes manual steps: automate routine fixes and cleanup.
 - Commit as Ravikiran, no Claude co-author or session lines: `git config user.name "Ravikiran Srinivasulu"; git config user.email "39718717+ravikiran-srini@users.noreply.github.com"`. Push: `git -c push.negotiate=true push origin HEAD:main` (the repo must be attached to the session with push access).
