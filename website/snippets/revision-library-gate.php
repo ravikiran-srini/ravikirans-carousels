@@ -67,6 +67,9 @@ if ( ! function_exists( 'rl_sign' ) ) {
 	}
 
 	function rl_known() {
+		if ( isset( $_GET['rl_visitor'] ) && current_user_can( 'manage_options' ) ) { // admin preview of the visitor view
+			return false;
+		}
 		if ( rl_cookie_ok() ) {
 			return true;
 		}
@@ -125,7 +128,7 @@ if ( ! function_exists( 'rl_sign' ) ) {
 			. '<p>Clicking the button confirms your email address and subscribes you to my free weekly exam-prep newsletter. The link works for 7 days and you can unsubscribe at any time.</p>'
 			. '<p>If you did not ask for this, ignore this email and nothing happens.</p>'
 			. '<p>Ravikiran<br>ravikirans.com</p><p style="color:#6b7280;font-size:12px">Button not working? Copy this link: ' . esc_html( $link ) . '</p>';
-		return wp_mail( $email, 'Your PDF: ' . wp_strip_all_tags( $it['title'] ?? 'Revision PDF' ), $body, array( 'Content-Type: text/html; charset=UTF-8' ) );
+		return wp_mail( $email, 'Your PDF: ' . wp_strip_all_tags( $it['title'] ?? 'Revision PDF' ), $body, array( 'Content-Type: text/html; charset=UTF-8', 'From: Ravikiran Srinivasulu <contact@' . wp_parse_url( home_url(), PHP_URL_HOST ) . '>' ) );
 	}
 
 	/* The PDF is streamed through the site so the page never shows the GitHub address. */
