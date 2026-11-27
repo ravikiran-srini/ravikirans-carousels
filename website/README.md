@@ -47,12 +47,12 @@ Done:
   - Raw GitHub PDF links stay public (accepted: the same PDFs are free on LinkedIn).
   - Old subscribers pass through personal links: the snippet registers the FluentCRM smartcode `{{rl.key}}`; newsletter links use `https://ravikirans.com/revision-library/?rlp={{rl.key}}` (the email chat adds them). FluentCRM's own cookie `fc_hash_secure` also counts. Fallback: same form, same email.
   - Spam control: hidden honeypot, 3 emails per address and 10 per IP per hour.
-- Test entry: `library.json` holds one item `2026-11-27-test-sample` (category_slug `zz-test` so no guide shows a box; cover `carousels/test-sample-cover.png`, pdf `carousels/red-hat.pdf`). Remove the item and the cover PNG after testing.
+- Tested live 27 Nov with a sample entry and a test contact (form, emailed link, confirm, subscribe, cookie, PDF streamed at original size, visitor 404 while the page is a draft, bad link, unknown slug). Test contact, its tag and the sample entry were removed afterwards.
 
 `library.json` item format: `{"slug":"<date>-<slug>","title","category","category_slug","date","cover","pdf","summary","guide_url"}` (cover and pdf are raw GitHub URLs; category_slug comes from `categories.csv` and must equal the WordPress category slug).
 
 To do, in order:
-1. Install the gate snippet (Code Snippets, "Revision Library PDF pages + email gate", run everywhere), push `library.json` test entry, test live as admin with one test contact; remove the test data.
+1. Done 27 Nov: gate installed (Code Snippets id 12 "Revision Library PDF pages + email gate", active; id 11 updated) and tested. Admin preview: add `?rl_visitor=1` to a PDF page to see the visitor view. Not tested end to end: the personal `?rlp=` link (key format only); verify it with the email chat's one-contact test.
 2. Show him the preview; publish the Revision Library page only after his OK. Then tell him the first real PDF will fill the page and the boxes.
 3. Email chat: add the personal link above to newsletter emails (verify `{{rl.key}}` renders inside a link with a one-contact test).
 4. "Signup source" (see below).

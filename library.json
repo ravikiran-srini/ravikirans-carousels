@@ -1,15 +1,1 @@
-{
- "items": [
-  {
-   "slug": "2026-11-27-test-sample",
-   "title": "Test sample: Red Hat revision PDF",
-   "category": "Red Hat",
-   "category_slug": "zz-test",
-   "date": "2026-11-27",
-   "cover": "https://raw.githubusercontent.com/ravikiran-srini/ravikirans-marketing/main/carousels/test-sample-cover.png",
-   "pdf": "https://raw.githubusercontent.com/ravikiran-srini/ravikirans-marketing/main/carousels/red-hat.pdf",
-   "summary": "A sample entry used to test the Revision Library page and the email gate.",
-   "guide_url": "https://ravikirans.com/"
-  }
- ]
-}
+{"items": []}
