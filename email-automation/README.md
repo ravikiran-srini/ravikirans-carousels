@@ -53,6 +53,7 @@ No passwords, API keys or access keys are stored here (this repo is public). Cre
 ## Pending
 - Wait for SES production access. Then: send a one-contact test through FluentCRM (use a test tag), then Batch 01 (266), check bounces and complaints in SES, then the rest.
 - Welcome-back DRAFT: campaign id 1 "Welcome back - Batch 01", status draft, subject "Still want exam-prep tips?", preheader "A short weekly email on cloud and data certification prep", from Ravikiran Srinivasulu <contact@ravikirans.com>, list Newsletter + tag Batch 01 (266 confirmed in the UI). Short body with a button to ravikirans.com. Ravikiran has not reviewed it yet: show it. Do NOT schedule or send without his go-ahead.
+- Back up the list first: export all FluentCRM contacts to CSV (FluentCRM is the only copy now that Brevo is closed). Ask before saving the file anywhere.
 - Clean junk addresses before the first send (SES reviews at about 5% hard bounces, may pause at 10%).
 - Build campaigns for Batch 02 to 15 by cloning campaign 1 with a different tag (not built). All at once is possible after approval; daily batches are no longer needed.
 - After each send: read bounces and complaints, mark hard bounces "Bounced", remove unsubscribes. Later a scheduled task.
