@@ -56,7 +56,7 @@ To do, in order:
 2. Show him the preview; publish the Revision Library page only after his OK. Then tell him the first real PDF will fill the page and the boxes.
 3. Email chat: add the personal link above to newsletter emails (verify `{{rl.key}}` renders inside a link with a one-contact test).
 4. "Signup source" (see below).
-5. App plan, one page.
+5. App plan: done, see `app-plan.md`.
 
 ## Signup source (undecided: now, or with the library)
 Popup form is Fluent Forms form 3 with hidden field `signup_page` = `{embed_post.permalink}` mapped to the FluentCRM custom field "Signup page". He wants ONE column called "Signup source": the page URL for ordinary popup signups, and the vendor or certification category for signups triggered by a PDF download. My recommendation: first source only, plus a tag "Downloaded: <vendor>" per later download. He has not chosen the timing.
@@ -73,7 +73,7 @@ Popup form is Fluent Forms form 3 with hidden field `signup_page` = `{embed_post
 - Open, low priority: Gravatar and sidebar photo (he does them), AdSense propagation, LinkedIn groups reposting (skipped).
 
 ## Course app (not started)
-He wants a simple Android and iOS app with three sections: video courses people can buy in the app, timed test questions so users can judge their knowledge, and a library of the category-by-category carousel PDFs, each linked to its course (course-specific PDFs later). He may connect a Teachable-style account to the website later. The Revision Library and `library.json` are meant to be reusable as the app's PDF source. Write a one-page plan after the library is done.
+He wants a simple Android and iOS app with three sections: video courses people can buy in the app, timed test questions so users can judge their knowledge, and a library of the category-by-category carousel PDFs, each linked to its course (course-specific PDFs later). He may connect a Teachable-style account to the website later. The Revision Library and `library.json` are meant to be reusable as the app's PDF source. One-page plan written 27 Nov 2026: `app-plan.md` (waiting for his answer on selling in-app now or later).
 
 ## Working notes
 - Built-in browser (browser_repl) is signed in to WordPress admin. Set a wide viewport (`setViewportSize({width:1300,height:1000})`) or admin content hides. Reuse tab variables; declaring the same name twice fails.

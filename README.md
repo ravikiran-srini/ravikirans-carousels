@@ -5,6 +5,7 @@ The daily job follows `tools/NIGHTLY.md`; Make publishes `today.json` at 7 PM IS
 ## Index (start here in a new chat)
 Rule for every chat: save all work, decisions and rules to these files after every message turn, and remind Ravikiran when the chat is compacted (details at the top of `website/README.md`).
 - `website/README.md`: website, Revision Library, carousel jobs state, standing rules, to-do. Snippet source in `website/snippets/`.
+- `website/app-plan.md`: one-page plan for the Android/iOS course app (written 27 Nov 2026).
 - `email-automation/README.md`: newsletter, FluentCRM, Amazon SES (separate chat).
 - `library.json`: the Revision Library data the site reads; the morning job appends to it.
 - `tools/NIGHTLY.md`, `tools/render.py`, `tools/style.css`, `tools/brand.py`: the morning carousel job and its renderer.
