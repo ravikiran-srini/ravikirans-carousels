@@ -5,8 +5,8 @@ No passwords, API keys or access keys are stored here (this repo is public). Cre
 
 ## Current status (read first)
 - Sending is on Amazon SES (Sydney) via FluentSMTP. Brevo is gone: connection, DNS records and account all removed.
-- SES is in the SANDBOX. Production access was requested on 26 Nov 2026 (up to 96 hours). Until approved: 200 emails a day, 1 a second, recipients must be verified (any @ravikirans.com address counts).
-- Do NOT send any campaign until production access is approved AND Ravikiran says go. He said he will not send for at least 2 weeks (from 27 Nov 2026).
+- SES production access is GRANTED (seen 27 Nov 2026): 50,000 emails per 24 hours, 14 a second, account Healthy, plan Essentials. The free plan did not block it. Requested 26 Nov 2026.
+- Do NOT send any campaign until Ravikiran says go. He said he will not send for at least 2 weeks (from 27 Nov 2026).
 - Welcome-back campaign is a draft only (id 1). Footer details are now filled in.
 
 ## Goal
@@ -33,10 +33,10 @@ No passwords, API keys or access keys are stored here (this repo is public). Cre
 - Console sign-in: the classic root sign-in rejects the email. Use "Change to new experience", then enter contact@ravikirans.com; a code goes to his Gmail via the Hostinger forwarder.
 - SES identity: ravikirans.com in Sydney, Easy DKIM (3 CNAMEs in Hostinger DNS), status Verified.
 - IAM user `fluentsmtp-ses` with customer-managed policy `FluentSMTP-SES-SendOnly` (ses:SendEmail, SendRawEmail, GetSendQuota). Ravikiran created the access key himself and pasted it into FluentSMTP. Inline policies and attach-by-URL are blocked on the free plan; create a managed policy, then attach through the user's Permissions tab.
-- Production access request: Marketing, https://ravikirans.com. Status "Under review" (SES Get set up page, Sydney).
+- Production access request: Marketing, https://ravikirans.com. Status "Production access granted" (SES Get set up page, Sydney, checked 27 Nov 2026). Quota 50,000 a day, 14 a second; 3 test emails sent so far.
 - Bounce handling: the SES account-level suppression list is on by default. Optional extra: SNS topic plus FluentCRM bounce webhook (not set up).
 - Costs: Essentials plan about $0.16 per 1,000 emails; 8,000 subscribers x 4 sends a month is about $5 a month. Attachments cost $0.12 per GB per copy, so never attach. Free-plan credits ($100 plus up to $100) expire 26 May 2027.
-- Open question: whether the free plan blocks production access (a paid plan with a payment method might be needed). Check the SES status when approval or a rejection arrives, and tell Ravikiran before anything is charged.
+- Resolved 27 Nov 2026: the free plan did not block production access; no paid plan was needed. Tell Ravikiran before anything is charged (credits cover sending until 26 May 2027).
 - Still his steps: enable MFA on the AWS root user. His Hostinger email plan expires 2029-07-29 with auto-renew off: renew it or add a second recovery email on AWS.
 
 ## DNS (Hostinger hPanel, ravikirans.com)
@@ -51,7 +51,7 @@ No passwords, API keys or access keys are stored here (this repo is public). Cre
 - 26 Nov: FluentSMTP connection removed (Ravikiran replaced it with SES). 27 Nov: DNS records removed; account closed via Settings > General > "Definitively close your account", with a code emailed to his Gmail that he entered himself. Nothing left to do.
 
 ## Pending
-- Wait for SES production access. Then: send a one-contact test through FluentCRM (use a test tag), then Batch 01 (266), check bounces and complaints in SES, then the rest.
+- When Ravikiran says go: send a one-contact test through FluentCRM (use a test tag), then Batch 01 (266), check bounces and complaints in SES, then the rest.
 - Welcome-back DRAFT: campaign id 1 "Welcome back - Batch 01", status draft, subject "Still want exam-prep tips?", preheader "A short weekly email on cloud and data certification prep", from Ravikiran Srinivasulu <contact@ravikirans.com>, list Newsletter + tag Batch 01 (266 confirmed in the UI). Short body with a button to ravikirans.com. Ravikiran has not reviewed it yet: show it. Do NOT schedule or send without his go-ahead.
 - Back up the list first: export all FluentCRM contacts to CSV (FluentCRM is the only copy now that Brevo is closed). Ask before saving the file anywhere.
 - Clean junk addresses before the first send (SES reviews at about 5% hard bounces, may pause at 10%).
