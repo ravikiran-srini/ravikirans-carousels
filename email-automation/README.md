@@ -7,7 +7,7 @@ No passwords, API keys or access keys are stored here (this repo is public). Cre
 - Sending is on Amazon SES (Sydney) via FluentSMTP. Brevo is gone: connection, DNS records and account all removed.
 - SES production access is GRANTED (seen 27 Nov 2026): 50,000 emails per 24 hours, 14 a second, account Healthy, plan Essentials. The free plan did not block it. Requested 26 Nov 2026.
 - Do NOT send any campaign until Ravikiran says go. He said he will not send for at least 2 weeks (from 27 Nov 2026).
-- Welcome-back campaign is a draft only (id 1). Footer details are now filled in.
+- Welcome-back campaigns are drafts only: id 1 (Batch 01) plus ids 2 to 15 (Batch 02 to 15), all unsent. Footer details are now filled in.
 
 ## Goal
 - Collect subscribers on ravikirans.com, store them on Hostinger, record the signup page.
@@ -55,7 +55,7 @@ No passwords, API keys or access keys are stored here (this repo is public). Cre
 - Welcome-back DRAFT: campaign id 1 "Welcome back - Batch 01", status draft, subject "Still want exam-prep tips?", preheader "A short weekly email on cloud and data certification prep", from Ravikiran Srinivasulu <contact@ravikirans.com>, list Newsletter + tag Batch 01 (266 confirmed in the UI). Short body with a button to ravikirans.com. Ravikiran has not reviewed it yet: show it. Do NOT schedule or send without his go-ahead.
 - Back up the list first: export all FluentCRM contacts to CSV (FluentCRM is the only copy now that Brevo is closed). Ask before saving the file anywhere.
 - Clean junk addresses before the first send (SES reviews at about 5% hard bounces, may pause at 10%).
-- Build campaigns for Batch 02 to 15 by cloning campaign 1 with a different tag (not built). All at once is possible after approval; daily batches are no longer needed.
+- Campaigns for Batch 02 to 15 are built as unsent DRAFTS (27 Nov 2026): ids 2 to 15, titled "Welcome back - Batch NN", exact copies of campaign 1 (same subject, preheader, body, sender) with list Newsletter and tag Batch NN (campaign id = batch number; tag id = batch number + 2). Verified through the API; recipient counts not checked in the UI. If campaign 1's text changes, re-copy it to ids 2 to 15. All at once is possible; daily batches are no longer needed.
 - After each send: read bounces and complaints, mark hard bounces "Bounced", remove unsubscribes. Later a scheduled task.
 - Weekly Claude scheduled task: not built. Optional: real server cron; WordPress updates (8 pending, a PHP update is also recommended).
 - Schedule endpoint (POST /campaigns/{id}/schedule) is untested on purpose: it would send. Test only with a one-contact test tag.
