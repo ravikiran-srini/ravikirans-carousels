@@ -22,7 +22,7 @@ No passwords, keys or tokens in this repo (it is public).
 - Morning build: scheduled task trig_01XPbfZFBzHA5CavBfddNXKT (07:37 IST, Opus 5.5). DISABLED for the week of 23 to 29 Nov at his request. Follows `tools/NIGHTLY.md`; writes `today.json`, `plan.csv`, `carousels/*`, and now also appends to `library.json`.
 - Make 8659415: daily 19:00 IST post (Mon, Tue, Thu, Sat) from `today.json`. Paused for the week.
 - Make 8753316: saves the YouTube feed and traffic data to data store 262859. Now WEEKLY, Mondays 06:30 IST. Paused for the week.
-- Auto-resume: scheduled task trig_01Cu36Lbv4PFLpscG6Q5cV5E fires Sun 29 Nov 2026 20:00 IST; it re-enables the build task and activates Make 8659415 and 8753316, confirms all three, and tells him in one line. Check it ran; if not, resume them by hand.
+- Auto-resume: scheduled task trig_01Cu36Lbv4PFLpscG6Q5cV5E fires Sun 29 Nov 2026 20:00 IST; it re-enables the build task and activates Make 8659415 and 8753316, confirms all three, and tells him in one line. Checked Fri 27 Nov: enabled, next run 29 Nov 14:30 UTC, not yet run. After it fires, check it ran; if not, resume them by hand.
 - Old reminder trig_01D73gDKiZbYwBbjb9oj9vLk (the 24 Nov 08:45 check) could not be disabled (denied). It may fire into an old chat; ignore it.
 - Make 8640867: delete only after about a week and on his explicit say-so. Make 8660956: delete only on his explicit "delete".
 
@@ -40,22 +40,29 @@ Done:
 - WordPress page "Revision Library", id 50437, slug `revision-library`, status DRAFT, contains the shortcode. Empty state reads "Quick revision PDFs are on the way". Preview: https://ravikirans.com/?page_id=50437&preview=true (signed in).
 - `library.json` created empty: `{"items": []}`. `tools/NIGHTLY.md` step 6 now appends an item for each `post` and `category` PDF.
 - Tested with stubs (grouping, sort, box); not yet tested live with a real entry.
+- 27 Nov: per-PDF page and email gate written as `website/snippets/revision-library-gate.php` (second snippet, needs snippet 11 for `rl_items`; snippet 11 now lets admins bypass the 1-hour cache). Helper tests pass with stubs. Install state: see "To do".
+- How the gate works:
+  - `/revision-library/<slug>/` is served through the Revision Library page itself (rewrite to `pagename=revision-library`), so it is public only while that page is published; admins see it in draft. No separate switch.
+  - Form (email) -> signed link emailed (7 days, one PDF, nothing created yet) -> click creates or confirms the FluentCRM contact (list Newsletter, tag "Downloaded: <category>"; new contacts also tag "Website signup" and the signup field gets the category), sets cookie `rl_ok` (1 year), then the PDF is streamed through the site (the GitHub address is never shown). An unsubscribed contact is not resubscribed (FluentCRM guard) but still gets the PDF.
+  - Raw GitHub PDF links stay public (accepted: the same PDFs are free on LinkedIn).
+  - Old subscribers pass through personal links: the snippet registers the FluentCRM smartcode `{{rl.key}}`; newsletter links use `https://ravikirans.com/revision-library/?rlp={{rl.key}}` (the email chat adds them). FluentCRM's own cookie `fc_hash_secure` also counts. Fallback: same form, same email.
+  - Spam control: hidden honeypot, 3 emails per address and 10 per IP per hour.
+- Test entry: `library.json` holds one item `2026-11-27-test-sample` (category_slug `zz-test` so no guide shows a box; cover `carousels/test-sample-cover.png`, pdf `carousels/red-hat.pdf`). Remove the item and the cover PNG after testing.
 
 `library.json` item format: `{"slug":"<date>-<slug>","title","category","category_slug","date","cover","pdf","summary","guide_url"}` (cover and pdf are raw GitHub URLs; category_slug comes from `categories.csv` and must equal the WordPress category slug).
 
 To do, in order:
-1. Per-PDF page: public URL `/revision-library/<slug>/` (the library cards already link there). Needs a rewrite rule or a template in a snippet that renders from `library.json`; show cover, summary, Download button, link to `guide_url`, Udemy link.
-2. Email gate and tokenized links: Download button asks for an email (or recognises a cookie or a personal link); FluentCRM API creates or finds the contact, sends the link by email, link click confirms and subscribes, sets cookie, then serves the PDF. Protect direct PDF URLs (PDFs are public in the GitHub repo today; decide whether to host them on the site or accept that raw links exist). Use FluentCRM free features only (Pro features are unavailable).
-3. Add personal links to newsletter emails so old subscribers pass the gate automatically (FluentCRM smartcode, coordinate with the email chat).
+1. Install the gate snippet (Code Snippets, "Revision Library PDF pages + email gate", run everywhere), push `library.json` test entry, test live as admin with one test contact; remove the test data.
+2. Show him the preview; publish the Revision Library page only after his OK. Then tell him the first real PDF will fill the page and the boxes.
+3. Email chat: add the personal link above to newsletter emails (verify `{{rl.key}}` renders inside a link with a one-contact test).
 4. "Signup source" (see below).
-5. Test with one sample entry in `library.json` and a test contact; remove the test data afterwards; show him; publish the page only after his OK. Then tell him the first real PDF will fill the page and the boxes.
-6. App plan, one page.
+5. App plan, one page.
 
 ## Signup source (undecided: now, or with the library)
 Popup form is Fluent Forms form 3 with hidden field `signup_page` = `{embed_post.permalink}` mapped to the FluentCRM custom field "Signup page". He wants ONE column called "Signup source": the page URL for ordinary popup signups, and the vendor or certification category for signups triggered by a PDF download. My recommendation: first source only, plus a tag "Downloaded: <vendor>" per later download. He has not chosen the timing.
 
 ## Popup and confirmation email
-- Popup = Code Snippets snippet id 10, form 3. On 26 Nov 2026 the FluentCRM feed on form 3 got double opt-in turned on, the form message was changed to "Almost done! Check your inbox...", and the double opt-in email and thank-you text were reworded (FluentCRM > Settings > Email Settings > Double Opt-in Settings). The math captcha plugin is no longer needed; he asked about removing it (add-on "Custom Captcha Field for Fluent Forms"); check whether that was done.
+- Popup = Code Snippets snippet id 10, form 3. On 26 Nov 2026 the FluentCRM feed on form 3 got double opt-in turned on, the form message was changed to "Almost done! Check your inbox...", and the double opt-in email and thank-you text were reworded (FluentCRM > Settings > Email Settings > Double Opt-in Settings). The math captcha plugin is no longer needed; he asked about removing it (add-on "Custom Captcha Field for Fluent Forms"); checked 27 Nov: the add-on is still active (not removed).
 - Delivery of confirmation emails depends on SES, which is handled in the email chat.
 
 ## Site facts

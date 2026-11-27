@@ -2,7 +2,8 @@
    Data: library.json in the public repo (the nightly job appends to it). */
 if ( ! function_exists( 'rl_items' ) ) {
 	function rl_items() {
-		$items = get_transient( 'rl_library_items' );
+		static $memo = null; // admins always see the live file; everyone else gets the 1-hour cache
+		$items = null !== $memo ? $memo : ( current_user_can( 'manage_options' ) ? false : get_transient( 'rl_library_items' ) );
 		if ( false === $items ) {
 			$items = array();
 			$res   = wp_remote_get( 'https://raw.githubusercontent.com/ravikiran-srini/ravikirans-marketing/main/library.json', array( 'timeout' => 8 ) );
@@ -15,6 +16,7 @@ if ( ! function_exists( 'rl_items' ) ) {
 			set_transient( 'rl_library_items', $items, HOUR_IN_SECONDS );
 		}
 		usort( $items, function ( $a, $b ) { return strcmp( $b['date'] ?? '', $a['date'] ?? '' ); } );
+		$memo = $items;
 		return $items;
 	}
 }
