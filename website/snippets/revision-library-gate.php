@@ -70,8 +70,9 @@ if ( ! function_exists( 'rl_sign' ) ) {
 		if ( rl_cookie_ok() ) {
 			return true;
 		}
-		if ( function_exists( 'fluentcrm_get_current_contact' ) ) { // FluentCRM's own cookie, set when a subscriber opens a newsletter link
-			$c = fluentcrm_get_current_contact();
+		$h = isset( $_COOKIE['fc_hash_secure'] ) ? sanitize_text_field( wp_unslash( $_COOKIE['fc_hash_secure'] ) ) : '';
+		if ( $h && function_exists( 'FluentCrmApi' ) ) { // FluentCRM's own cookie, set when a subscriber opens a newsletter link (a WordPress login alone does not count)
+			$c = FluentCrmApi( 'contacts' )->getContactBySecureHash( $h );
 			if ( $c && 'subscribed' === $c->status ) {
 				rl_cookie_set( strtolower( $c->email ) );
 				return true;
