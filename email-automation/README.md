@@ -32,7 +32,7 @@ No passwords, API keys or access keys are stored here (this repo is public). Cre
 ## Data in FluentCRM
 - List "Newsletter" (id 1). Tags: "Website signup" (1), "Old list" (2), "Batch 01" to "Batch 15" (ids 3 to 17). Custom field "Signup page".
 - 3,979 contacts imported from the old Brevo list (all subscribed, all on Newsletter, tagged "Old list", each in exactly one Batch tag of 265 or 266). The dashboard showed 3,981 active contacts on 26 Nov (new signups since).
-- Junk addresses (a@b.com, aaa.pl@pl.pl and similar) are still inside. A scan was offered, not run: list them for Ravikiran, delete nothing until he approves.
+- Junk addresses are still inside, checked 28 Nov 2026: a@b.com, fuck@youporn.com, no@maybe.com, ss@dd.com, 123@gmail.com (ids 3860, 3957, 3959, 3961, 3903), all "subscribed". They were spotted by eye on 24 Nov; the full scan was never run (Ravikiran thought it had been). Counts that day: 3,981 subscribed, 3 pending, 0 bounced, 0 unsubscribed, 0 emails sent. Scan = list only; delete nothing until he approves.
 - The Brevo account is closed, so the old list now exists only in FluentCRM (and a CSV export from 24 Nov that he may have on his computer).
 
 ## AWS and SES (set up 26 Nov 2026)
