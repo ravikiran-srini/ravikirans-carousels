@@ -287,6 +287,12 @@ if ( ! function_exists( 'rl_sign' ) ) {
 		return $it ? rl_page_url( $it ) : $u;
 	} );
 
+	/* No Google ads on the library pages: they overlay the page on phones and distract from the signup. */
+	add_filter( 'widget_display_callback', function ( $instance, $widget ) {
+		$ad = is_array( $instance ) && 'custom_html' === $widget->id_base && false !== strpos( (string) ( $instance['content'] ?? '' ), 'adsbygoogle' );
+		return $ad && is_page( 'revision-library' ) ? false : $instance;
+	}, 10, 2 );
+
 	/* Smartcode for newsletter links: https://ravikirans.com/revision-library/?rlp={{rl.key}} */
 	add_action( 'fluent_crm/after_init', function () {
 		FluentCrmApi( 'extender' )->addSmartCode( 'rl', 'Revision Library', array( 'key' => 'Personal link key' ), function ( $code, $valueKey, $defaultValue, $subscriber ) {
