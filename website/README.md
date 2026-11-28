@@ -54,6 +54,7 @@ Done:
 To do, in order:
 1. Done 27 Nov: gate installed (Code Snippets id 12 "Revision Library PDF pages + email gate", active; id 11 updated) and tested. Admin preview: add `?rl_visitor=1` to a PDF page to see the visitor view. Not tested end to end: the personal `?rlp=` link (key format only); verify it with the email chat's one-contact test.
 2. DONE 28 Nov: Revision Library page published on his OK (public check: 200, empty message; unknown slug 404). The first real PDF fills the page and the boxes.
+- 28 Nov: on his phone, Google ads (side "Discover more" box + video banner, from the sidebar AdSense widget) overlaid the library page. Fixed in the gate snippet: the sidebar ad widget is skipped on /revision-library/ and its PDF pages (filter widget_display_callback). Live in snippet 12 (commit 0bff2f8); checked at phone width: no ad code. The same ads still show on other pages; his call whether to change them.
 3. Email chat: add the personal link above to newsletter emails (verify `{{rl.key}}` renders inside a link with a one-contact test).
 4. "Signup source" (see below).
 5. App plan: done, see `app-plan.md`.
