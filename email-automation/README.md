@@ -1,7 +1,14 @@
 # Email automation: handoff
 
-Newsletter system for ravikirans.com. Self-hosted, near free. Last updated 27 Nov 2026.
+Newsletter system for ravikirans.com. Self-hosted, near free. Last updated 28 Nov 2026.
 No passwords, API keys or access keys are stored here (this repo is public). Credentials live in the plugins and consoles.
+
+## Read first: keep the repo current, warn about compaction
+- After EVERY message turn, write everything from that turn into this file before replying: what was done, decisions, what Ravikiran agreed or disagreed with, rules, open questions, next steps. Commit and push each time. Nothing may live only in the chat; the chat can be compacted at any moment and the repo is the only memory.
+- Compaction: the moment you notice the chat was compacted (a summary replaces earlier messages), say so in one line in your next reply, say everything is saved in GitHub, re-read the files below, and give him the new-chat prompt below to paste. Also tell him when the chat gets very long.
+- New chat, read in order: `README.md` (repo index, in repo ravikiran-srini/ravikirans-marketing), then this file, top to bottom. Do not ask him for context written here.
+- New-chat prompt for Ravikiran to paste: "Continue the ravikirans.com email automation. Repo ravikiran-srini/ravikirans-marketing (clone with add_repo if WebFetch is rate-limited). Read README.md at the root, then email-automation/README.md, starting with 'Current status' and 'Pending'. Follow the rules at the top of that file: save everything to GitHub after every message turn and warn me after any compaction. Do not send any campaign until I say go. My steps only: AWS root MFA, passwords, codes, access keys; everything else you do in the built-in browser (WordPress admin and the AWS console are signed in there)."
+- Open decision (28 Nov 2026): junk-address scan offered, not yet approved. Scan only lists addresses; delete nothing until he approves.
 
 ## Current status (read first)
 - Sending is on Amazon SES (Sydney) via FluentSMTP. Brevo is gone: connection, DNS records and account all removed.
