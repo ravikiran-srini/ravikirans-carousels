@@ -81,3 +81,5 @@ He wants a simple Android and iOS app with three sections: video courses people 
 - Create a page through the REST API from an admin page: `fetch('/wp-json/wp/v2/pages', {method:'POST', headers:{'X-WP-Nonce': wpApiSettings.nonce, ...}})`.
 - Code Snippets editor: `document.querySelector('.CodeMirror').CodeMirror.setValue(code)`, then "Save and Activate".
 - A PHP snippet is linted with `php -l` before pasting; Code Snippets has safe mode if one breaks the site.
+
+- 28 Nov: logo sizes. Header logo was 70% wide on phones (old Additional CSS rule `#masthead a img`), footer 100% (phones) and 320px max (desktop). Footer rule in Appearance > Customize > Additional CSS is now `#footer .site-logo img{width:70%;max-width:400px}`: header and footer logos are equal at phone, tablet and desktop (210 / 400 / 400 px, measured). Old footer rule was `max-width:320px`.
