@@ -37,7 +37,7 @@ Design he approved:
 Done:
 - Code Snippets snippet id 11 "Revision Library (page + Quick Revision box)", active, run everywhere. Source copy: `website/snippets/revision-library.php` (paste there if the snippet is ever lost). It adds the shortcode `[revision_library]` and a `the_content` filter for the box. It reads `library.json` from raw.githubusercontent.com (cached 1 hour in the transient `rl_library_items`).
 - The box shows only when the guide's category has at least one PDF in `library.json`, so there are no dead links while the library is empty.
-- WordPress page "Revision Library", id 50437, slug `revision-library`, status DRAFT, contains the shortcode. Empty state reads "Quick revision PDFs are on the way". Preview: https://ravikirans.com/?page_id=50437&preview=true (signed in).
+- WordPress page "Revision Library", id 50437, slug `revision-library`, status PUBLISHED (28 Nov 2026, on his OK), contains the shortcode. Empty state reads "Quick revision PDFs are on the way". Preview: https://ravikirans.com/?page_id=50437&preview=true (signed in).
 - `library.json` created empty: `{"items": []}`. `tools/NIGHTLY.md` step 6 now appends an item for each `post` and `category` PDF.
 - Tested with stubs (grouping, sort, box); not yet tested live with a real entry.
 - 27 Nov: per-PDF page and email gate written as `website/snippets/revision-library-gate.php` (second snippet, needs snippet 11 for `rl_items`; snippet 11 now lets admins bypass the 1-hour cache). Helper tests pass with stubs. Install state: see "To do".
@@ -53,7 +53,7 @@ Done:
 
 To do, in order:
 1. Done 27 Nov: gate installed (Code Snippets id 12 "Revision Library PDF pages + email gate", active; id 11 updated) and tested. Admin preview: add `?rl_visitor=1` to a PDF page to see the visitor view. Not tested end to end: the personal `?rlp=` link (key format only); verify it with the email chat's one-contact test.
-2. Show him the preview; publish the Revision Library page only after his OK. Then tell him the first real PDF will fill the page and the boxes.
+2. DONE 28 Nov: Revision Library page published on his OK (public check: 200, empty message; unknown slug 404). The first real PDF fills the page and the boxes.
 3. Email chat: add the personal link above to newsletter emails (verify `{{rl.key}}` renders inside a link with a one-contact test).
 4. "Signup source" (see below).
 5. App plan: done, see `app-plan.md`.
